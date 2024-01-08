@@ -21,6 +21,7 @@ buildSync({
   outdir: 'dist',
   bundle: true,
   splitting: true,
+  tsconfig: path.join(import.meta.dir, 'tsconfig.json'),
   platform: 'browser',
   external: [...Object.keys(pkg.peerDependencies || {})],
 })
