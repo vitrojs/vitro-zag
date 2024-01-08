@@ -1,14 +1,14 @@
 
 ## Install
 
-Add 'vitro' to `package.json#trustedDependencies`
+<!-- Add 'vitro' to `package.json#trustedDependencies`
 
 ```json
 {
     "trustedDependencies": ["vitro", "@vitro/zag"],
 }
-```
+``` -->
 
 ```sh
-bun add github:vitrojs/{vitro, vitro-zag}
+pnpm add github:vitrojs/{vitro, vitro-zag}
 ```
