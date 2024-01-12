@@ -19,7 +19,9 @@
     "dev": "vite",
     "preview": "vite preview"
   },
-  "trustedDependencies": ["vitro"],
+  "trustedDependencies": [
+    "vitro"
+  ],
   "peerDependencies": {
     "@zag-js/core": "^0.32.0",
     "@zag-js/types": "^0.32.0",
@@ -27,7 +29,7 @@
     "vitro": "github:vitrojs/vitro"
   },
   "devDependencies": {
-    "bun-types": "^1.0.21",
+    "bun-types": "^1.0.22",
     "esbuild": "^0.19.11",
     "prettier": "^3.1.1"
   }
