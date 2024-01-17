@@ -1,5 +1,12 @@
 import type { Machine, StateMachine as S } from '@zag-js/core'
-import { $, isObservable, useCleanup, useEffect } from 'vitro'
+import {
+  $,
+  FunctionMaybe,
+  isObservable,
+  untrack,
+  useCleanup,
+  useEffect,
+} from 'vitro'
 import type { MachineOptions, Observify } from './types'
 
 export function copyObservableToRecord(
@@ -21,7 +28,9 @@ export function copyObservableToRecord(
 }
 export function useMachine<
   TContext extends Record<string, any>,
-  TProps extends Observify<Partial<TContext>>,
+  TProps extends
+    | Observify<Partial<TContext>>
+    | FunctionMaybe<Partial<TContext>>,
   TState extends S.StateSchema,
   TEvent extends S.EventObject = S.AnyEventObject,
 >(
@@ -30,7 +39,7 @@ export function useMachine<
   assign?: Partial<TContext>,
   options?: Omit<MachineOptions<TContext, TState, TEvent>, 'context'>,
 ) {
-  const initialContext = { ...props, ...assign } as TContext
+  const initialContext = { ...untrack(props), ...assign } as TContext
   const service = machine(initialContext)
   const { state: hydratedState } = (options as any) ?? {
     context: initialContext,
@@ -39,7 +48,8 @@ export function useMachine<
   const state = $(service.getState())
 
   useEffect(() => {
-    const nextContext = copyObservableToRecord(props)
+    const nextContext =
+      typeof props === 'function' ? props() : copyObservableToRecord(props)
     service.setContext(nextContext)
   })
 
