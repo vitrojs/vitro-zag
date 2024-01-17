@@ -39,7 +39,11 @@ export function useMachine<
   assign?: Partial<TContext>,
   options?: Omit<MachineOptions<TContext, TState, TEvent>, 'context'>,
 ) {
-  const initialContext = { ...untrack(props), ...assign } as TContext
+  const initialContext = (
+    typeof props === 'function'
+      ? Object.assign(props(), assign)
+      : copyObservableToRecord(props, assign)
+  ) as TContext
   const service = machine(initialContext)
   const { state: hydratedState } = (options as any) ?? {
     context: initialContext,
