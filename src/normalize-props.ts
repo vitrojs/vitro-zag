@@ -43,11 +43,6 @@ export const normalizeProps = createNormalizer<PropTypes>((props: Dict) => {
   for (const key in props) {
     const value = props[key]
 
-    // if (key === "style" && isObject(value)) {
-    //   normalized["style"] = cssify(value)
-    //   continue
-    // }
-
     if (key === 'children') {
       if (isString(value)) {
         normalized['textContent'] = value

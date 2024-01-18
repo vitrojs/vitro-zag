@@ -1,31 +1,9 @@
 import type { Machine, StateMachine as S } from '@zag-js/core'
-import {
-  $,
-  FunctionMaybe,
-  isObservable,
-  untrack,
-  useCleanup,
-  useEffect,
-} from 'vitro'
+import { $, FunctionMaybe, untrack, useCleanup, useEffect } from 'vitro'
 import type { MachineOptions, Observify } from './types'
 
-export function copyObservableToRecord(
-  o: Record<string, any>,
-  assign: Record<string, any> = {},
-) {
-  if (!o) return { ...assign }
+import { toRecord } from './props-map'
 
-  const obj = {} as any
-  for (const key in o) {
-    const v = o[key]
-    if (typeof v === 'function' && isObservable(v)) {
-      obj[key] = v()
-    } else {
-      obj[key] = v
-    }
-  }
-  return Object.assign(obj, assign)
-}
 export function useMachine<
   TContext extends Record<string, any>,
   TProps extends
@@ -39,10 +17,11 @@ export function useMachine<
   assign?: Partial<TContext>,
   options?: Omit<MachineOptions<TContext, TState, TEvent>, 'context'>,
 ) {
-  const initialContext = (
-    typeof props === 'function'
-      ? Object.assign(props(), assign)
-      : copyObservableToRecord(props, assign)
+  const initialContext = Object.assign(
+    untrack(() =>
+      typeof props === 'function' ? props() : toRecord(props),
+    ),
+    assign,
   ) as TContext
   const service = machine(initialContext)
   const { state: hydratedState } = (options as any) ?? {
@@ -53,7 +32,7 @@ export function useMachine<
 
   useEffect(() => {
     const nextContext =
-      typeof props === 'function' ? props() : copyObservableToRecord(props)
+      typeof props === 'function' ? props() : toRecord(props)
     service.setContext(nextContext)
   })
 

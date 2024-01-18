@@ -3,13 +3,12 @@ import { FunctionMaybe } from 'vitro'
 
 export type ValidComponent = keyof JSX.IntrinsicElements | JSX.Component<any>
 
-export type ComponentProps<T extends ValidComponent> = T extends JSX.Component<
-  infer P
->
-  ? P
-  : T extends keyof JSX.IntrinsicElements
-    ? JSX.IntrinsicElements[T]
-    : Record<string, unknown>
+export type ComponentProps<T extends ValidComponent> =
+  T extends JSX.Component<infer P>
+    ? P
+    : T extends keyof JSX.IntrinsicElements
+      ? JSX.IntrinsicElements[T]
+      : Record<string, any>
 
 export type Observify<T extends Record<string, any>> = {
   [K in keyof T]: T[K] extends (...args: any) => any
