@@ -7,8 +7,8 @@ export { useMachine } from './use-machine'
 export { toRecord, mergeProps } from './props-map'
 
 export type {
-  Observify,
-  ComponentProps,
-  ValidComponent,
-  MachineOptions,
+	Observify,
+	ComponentProps,
+	ValidComponent,
+	MachineOptions,
 } from './types'
